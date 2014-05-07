@@ -1,10 +1,10 @@
 class Client
   def initialize options
     api_key = options[:api_key]
-    @network_handler = EightGetter.new api_key
+    EightGetter.api_key = api_key
   end
 
   def get_mixes
-    @network_handler.get 'mixes'
+    EightGetter.get 'mixes'
   end
 end
