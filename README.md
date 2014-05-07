@@ -1,6 +1,6 @@
 # Quadeight
 
-TODO: Write a gem description
+Gem to allow interaction with 8tracks
 
 ## Installation
 
