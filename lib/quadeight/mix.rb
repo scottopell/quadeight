@@ -10,7 +10,6 @@ class Mix
         attr_accessor key.to_sym
       end
       instance_variable_set instance_var_name, json_obj[key]
-      puts "key is #{key} and value is #{json_obj[key]}"
     end
   end
 end
