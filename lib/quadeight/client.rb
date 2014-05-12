@@ -8,8 +8,8 @@ class Client
     raw_json = EightGetter.get 'mixes'
     mixes_obj = JSON.parse raw_json
     mixes = []
-    mixes_obj.each do |mix|
-      mixes << Mix.new( mix )
+    mixes_obj["mixes"].each do |mix|
+      mixes << Mix.new(mix)
     end
     mixes
   end

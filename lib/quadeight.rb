@@ -1,6 +1,7 @@
 require "quadeight/version"
 require "quadeight/client.rb"
 require "quadeight/eightgetter.rb"
+require "quadeight/mix.rb"
 
 module Quadeight
   def Quadeight.hello

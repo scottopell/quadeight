@@ -6,6 +6,7 @@ class EightGetter
   class << EightGetter
     def api_key= api_key
       @api_key = api_key
+      default_params :api_key => api_key
     end
 
     def api_key
@@ -14,10 +15,8 @@ class EightGetter
   end
 
   base_uri '8tracks.com'
-  default_params :api_key => EightGetter.api_key
-  debug_output $stdout
 
   def self.get path
-    super "/#{path}.json"
+    super("/#{path}.json").body
   end
 end

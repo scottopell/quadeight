@@ -9,13 +9,15 @@ describe Quadeight do
 
   it 'correctly authenticates' do
     mixes = client.get_mixes
-    mixes.should_not eq('You must use a valid API key.')
+    expect(mixes).to_not eq('You must use a valid API key.')
   end
 
   it 'gets mixes correctly' do
-    client.get_mixes
+    mixes = client.get_mixes
     mixes.each do |m|
-      m.class.should eq(Mix)
+      expect(m.class).to eq(Mix)
+      expect(m.id).to_not be_nil
+      expect(m.restful_url.class).to eq(String)
     end
   end
 end
