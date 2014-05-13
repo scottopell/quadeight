@@ -9,10 +9,20 @@ describe 'client functions' do
   end
 
   let(:mix_set) { client.get_mixes }
+  let(:mix) { mix_set.mixes.first }
 
   describe 'EightGetter.api_key' do
     it 'sends a valid api key correctly' do
       expect(mix_set).to_not eq('You must use a valid API key.')
+    end
+  end
+
+  describe 'EightGetter.generate_play_token' do
+    it 'receives a valid play token from api' do
+      # this random `client` is here to ensure that the api key is set on
+      # EightGetter, its needed to generate a play token
+      client
+      expect(EightGetter.generate_play_token).to match(/[0-9]{9}/)
     end
   end
 
@@ -24,7 +34,9 @@ describe 'client functions' do
         expect(m.id).to_not be_nil
       end
     end
+  end
 
+  describe 'MixSet.initialize' do
     it 'has valid path' do
       expect(mix_set.path.class).to eq(String)
       expect(mix_set.path.length).to_not eq(0)
@@ -42,8 +54,6 @@ describe 'client functions' do
   end
 
   describe 'client.user' do
-    let(:mix) { mix_set.mixes.first }
-
     its 'user id should be present' do
       expect(mix.user.id).to_not be_nil
     end
@@ -63,7 +73,14 @@ describe 'client functions' do
         expect(mix.class).to eq(Mix)
       end
     end
-
   end
 
+  describe 'Mix.each_song' do
+    it 'should iterate through each song, and each song should be valid' do
+      mix.each_song(:report) do |song|
+        expect(song.class).to eq(Track)
+        expect(song.track_file_stream_url).to match(/http:.*/)
+      end
+    end
+  end
 end

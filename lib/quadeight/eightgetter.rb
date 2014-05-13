@@ -18,10 +18,14 @@ class EightGetter
   headers 'X-Api-Version' => '3'
 
   def self.get path, args = {}
-    super("/#{path}.json", :query => args).body
+    super(path, :query => args).body
   end
 
   def self.get_json path, args = {}
-    JSON.parse(get(path, args))
+    JSON.parse( get("/#{path}.json", args) )
+  end
+
+  def self.generate_play_token
+    get_json("sets/new")["play_token"]
   end
 end
