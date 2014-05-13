@@ -5,10 +5,9 @@ class Client
   end
 
   def get_mixes
-    raw_json = EightGetter.get 'mixes'
-    mixes_obj = JSON.parse raw_json
+    mixes_obj = EightGetter.get_json('mix_sets/all', { include: 'mixes'})
     mixes = []
-    mixes_obj["mixes"].each do |mix|
+    mixes_obj["mix_set"]["mixes"].each do |mix|
       mixes << Mix.new(mix)
     end
     mixes

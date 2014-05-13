@@ -1,7 +1,6 @@
 class User
   def initialize id
-    raw_json = EightGetter.get "users/#{id}"
-    json_obj = JSON.parse raw_json
+    json_obj = EightGetter.get_json "users/#{id}"
     user = json_obj["user"]
 
     user.keys.each do |key|
@@ -17,9 +16,8 @@ class User
   end
 
   def mixes
-    raw_json = EightGetter.get "users/#{id}/mixes"
-    json_obj = JSON.parse raw_json
-    json_mixes = json_obj['mixes']
+    json_obj = EightGetter.get_json "users/#{id}/mixes"
+    json_mixes = json_obj['mix_set']['mixes']
     mixes = []
     json_mixes.each do |jm|
       mixes << Mix.new(jm)

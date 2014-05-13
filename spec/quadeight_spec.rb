@@ -26,7 +26,7 @@ describe 'client functions' do
 
     its 'members all have rest url present' do
       mixes.each do |m|
-        expect(m.restful_url.class).to eq(String)
+        expect(m.path.class).to eq(String)
       end
     end
   end

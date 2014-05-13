@@ -3,8 +3,8 @@ class Mix
 
   def initialize json_obj
     json_obj.keys.each do |key|
-      if key == 'user'
-        populate_user json_obj['user']['id']
+      if key == 'user_id'
+        populate_user json_obj['user_id']
         next
       end
       instance_var_name = "@#{key}".to_sym
