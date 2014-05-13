@@ -2,20 +2,13 @@ class Mix
   attr_reader :user
 
   def initialize json_obj
-    json_obj.keys.each do |key|
+    user_pop_proc = Proc.new do |obj, key, value|
       if key == 'user_id'
-        populate_user json_obj['user_id']
-        next
+        obj.send( :populate_user, value )
       end
-      instance_var_name = "@#{key}".to_sym
-      # create getter and setter for variable
-      class <<self
-        self
-      end.class_eval do
-        attr_accessor key.to_sym
-      end
-      instance_variable_set instance_var_name, json_obj[key]
+      key == 'user_id'
     end
+    Helpers.populate_instance_variables self, json_obj, user_pop_proc
   end
 
   def populate_user id

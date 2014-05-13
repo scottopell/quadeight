@@ -1,5 +1,9 @@
 # Quadeight
 
+## __BETA__
+This gem is under active development and while certain functionality is
+working, it is not complete.
+
 Gem to allow interaction with 8tracks
 
 ## Installation
