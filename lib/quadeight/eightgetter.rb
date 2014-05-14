@@ -16,6 +16,7 @@ class EightGetter
 
   base_uri '8tracks.com'
   headers 'X-Api-Version' => '3'
+  debug_output $stderr
 
   def self.get path, args = {}
     super(path, :query => args).body

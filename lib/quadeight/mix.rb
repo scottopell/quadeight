@@ -11,31 +11,48 @@ class Mix
     Helpers.populate_instance_variables self, json_obj, user_pop_proc
   end
 
-  def populate_user id
-    @user = User.new id
-  end
-
-  def each_song mode
-    play_token = EightGetter.generate_play_token
-    json_obj = EightGetter.get_json( "sets/#{play_token}/play",
-                                     { mix_id: id } )
-    set = json_obj["set"]
+  def each_track mode
+    @play_token = EightGetter.generate_play_token
+    set = retrieve_set :play
     while set["at_end"] == false
       skip_allowed = set["skip_allowed"]
       track = Track.new set["track"]
       yield track
+
       if mode == :report
-        EightGetter.get( "/sets/#{play_token}/report.json",
-                         { mix_id: id, track_id: track.id } )
+        report_track track.id
       end
       next_mode = nil
       if skip_allowed
         next_mode = :skip
       else
+        sleep(180)
         next_mode = :next
       end
-      set = EightGetter.get_json( "sets/#{play_token}/#{next_mode}",
-                                  { mix_id: id } )
+      set = retrieve_set next_mode
     end
+  end
+
+  def first_song
+    set = retrieve_set :play
+    Track.new set["track"]
+    binding.pry
+  end
+
+  private
+
+  def populate_user id
+    @user = User.new id
+  end
+
+  def retrieve_set mode
+    json_obj = EightGetter.get_json( "sets/#{@play_token}/#{mode}",
+                                     { mix_id: id } )
+    json_obj["set"]
+  end
+
+  def report_track track_id
+    EightGetter.get( "/sets/#{@play_token}/report.json",
+                     { mix_id: id, track_id: track_id } )
   end
 end

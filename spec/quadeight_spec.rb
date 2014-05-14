@@ -10,6 +10,7 @@ describe 'client functions' do
 
   let(:mix_set) { client.get_mixes }
   let(:mix) { mix_set.mixes.first }
+  let(:track) { mix.first_song }
 
   describe 'EightGetter.api_key' do
     it 'sends a valid api key correctly' do
@@ -77,10 +78,16 @@ describe 'client functions' do
 
   describe 'Mix.each_song' do
     it 'should iterate through each song, and each song should be valid' do
-      mix.each_song(:report) do |song|
-        expect(song.class).to eq(Track)
-        expect(song.track_file_stream_url).to match(/http:.*/)
+      mix.each_track(:report) do |track|
+        expect(track.class).to eq(Track)
+        expect(track.track_file_stream_url).to match(/http.*/)
       end
+    end
+  end
+
+  describe 'Track.export_track' do
+    it 'saves a track with proper (available) metadata' do
+      track
     end
   end
 end
