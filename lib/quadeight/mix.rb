@@ -36,7 +36,6 @@ class Mix
   def first_song
     set = retrieve_set :play
     Track.new set["track"]
-    binding.pry
   end
 
   private
