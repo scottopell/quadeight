@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Scott Opell']
   spec.email         = ['me@scottopell.com']
   spec.summary       = %q{8track gem. Gets rid of nasty json}
-  spec.description   = %q{Wraps all the functionality available in 8tracks json api in a pretty gem}
+  spec.description   = %q{Wraps all the functionality
+                          available in 8tracks json api in a pretty gem}
   spec.homepage      = ''
   spec.license       = 'MIT'
 
@@ -25,6 +26,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'awesome_print'
+  spec.add_development_dependency 'pry-rescue'
+  spec.add_development_dependency 'pry-stack_explorer'
 
   spec.add_dependency 'httparty'
 end
