@@ -34,6 +34,7 @@ class Mix
   end
 
   def first_song
+    @play_token = EightGetter.generate_play_token
     set = retrieve_set :play
     Track.new set["track"]
   end

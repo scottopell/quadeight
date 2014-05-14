@@ -81,13 +81,21 @@ describe 'client functions' do
       mix.each_track(:report) do |track|
         expect(track.class).to eq(Track)
         expect(track.track_file_stream_url).to match(/http.*/)
+        puts "track name #{track.name} => #{track.track_file_stream_url}"
       end
+    end
+  end
+
+  describe 'Track.initialize' do
+    it 'creates a track from available data' do
+      expect(track.class).to eq(Track)
+      expect(track.name.length).to_not eq(0)
+      expect(track.track_file_stream_url.length).to_not eq(0)
     end
   end
 
   describe 'Track.export_track' do
     it 'saves a track with proper (available) metadata' do
-      track
     end
   end
 end
