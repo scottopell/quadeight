@@ -1,5 +1,5 @@
 class Mix
-  attr_reader :user
+  attr_reader :user, :tracks
 
   def initialize json_obj
     user_pop_proc = Proc.new do |obj, key, value|
@@ -8,15 +8,21 @@ class Mix
       end
       key == 'user_id'
     end
+    @tracks = []
     Helpers.populate_instance_variables self, json_obj, user_pop_proc
   end
 
   def each_track mode
+    if @tracks.length > 0
+      @tracks.each { |t| yield t }
+      return
+    end
     @play_token = EightGetter.generate_play_token
     set = retrieve_set :play
     while set["at_end"] == false
       skip_allowed = set["skip_allowed"]
       track = Track.new set["track"]
+      @tracks << track
       yield track
 
       if mode == :report
@@ -26,7 +32,9 @@ class Mix
       if skip_allowed
         next_mode = :skip
       else
-        sleep(180)
+        secs = track.length / 1000
+        puts "waiting for #{secs}s"
+        sleep(secs)
         next_mode = :next
       end
       set = retrieve_set next_mode
@@ -34,6 +42,9 @@ class Mix
   end
 
   def first_song
+    if @tracks.length > 0
+      return @tracks.first
+    end
     @play_token = EightGetter.generate_play_token
     set = retrieve_set :play
     Track.new set["track"]

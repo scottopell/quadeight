@@ -1,11 +1,8 @@
 require 'spec_helper'
 
-API_KEY = '8386c94e832b84206fd1adba087c3009284e62bb'
-
-
 describe 'client functions' do
   let(:client) do
-    Quadeight.create_client api_key: API_KEY
+    Quadeight.create_client api_key: ENV['EIGHT_API_KEY']
   end
 
   let(:mix_set) { client.get_mixes }
@@ -83,6 +80,14 @@ describe 'client functions' do
         expect(track.track_file_stream_url).to match(/http.*/)
         puts "track name #{track.name} => #{track.track_file_stream_url}"
       end
+    end
+  end
+
+  describe 'Track.populate_length' do
+    it 'works on 8tracks domains' do
+      mytrack = Track.new Hash.new
+      mytrack.stub(:track_file_stream_url) { 'http://cft.8tracks.com/tf/047/400/339/tfYK9g.48k.v3.m4a' }
+      expect(mytrack.length).to_not be_nil
     end
   end
 

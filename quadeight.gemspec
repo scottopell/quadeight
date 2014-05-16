@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry-stack_explorer'
 
   spec.add_dependency 'httparty'
+  spec.add_dependency 'mp4info'
 end
