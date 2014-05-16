@@ -94,13 +94,25 @@ describe 'client functions' do
   describe 'Track.initialize' do
     it 'creates a track from available data' do
       expect(track.class).to eq(Track)
-      expect(track.name.length).to_not eq(0)
-      expect(track.track_file_stream_url.length).to_not eq(0)
+      expect(track.name.length).to be > 0
+      expect(track.track_file_stream_url.length).to be > 0
     end
   end
 
   describe 'Track.export_track' do
     it 'saves a track with proper (available) metadata' do
+      tmp_dir = Dir.mktmpdir
+      location = track.export_track tmp_dir
+      begin
+        File.open(location, 'r') do |file|
+          tag = ID3Tag.read file
+          expect(tag.artist.length).to be > 0
+          expect(tag.title.length).to be > 0
+        end
+      ensure
+        FileUtils.rm location
+        FileUtils.remove_entry_secure tmp_dir
+      end
     end
   end
 end

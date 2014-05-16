@@ -21,7 +21,28 @@ class Track
     @length || populate_length
   end
 
+  def export_track location
+    tmp_dir = Dir.mktmpdir
+    mp4_path = "" # TODO
+    if file_type == 'mp3'
+      write_tags mp3_path
+    end
+    m4a_path = "#{tmp_dir}/tmp."
+    wav_path = "#{tmp_dir}/tmp.wav"
+    `faad-o #{wav_path} `
+  end
+
   private
+
+  def file_type
+    @file_type || populate_file_type
+  end
+
+  def populate_file_type
+    response = EightGetter.head track_file_stream_url
+    uri = response.request.last_uri
+    @file_type = uri.path[-3..-1].downcase
+  end
 
   def populate_length
     response = EightGetter.head track_file_stream_url
@@ -31,7 +52,7 @@ class Track
     else
       # the following will get the actual uri, after redirects
       uri = response.request.last_uri
-      file_type = uri.path[-3..-1].downcase
+      @file_type = uri.path[-3..-1].downcase
       if file_type == "mp3"
         bytes = Helpers.partial_read 30, track_file_stream_url
         @length = 240
