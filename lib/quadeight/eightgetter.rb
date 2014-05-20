@@ -38,4 +38,11 @@ class EightGetter
   def self.generate_play_token
     get_json('sets/new')['play_token']
   end
+
+  def self.download_to source, destination
+    resp = get source
+    File.open(destination, 'w') do |file|
+      file.write resp
+    end
+  end
 end

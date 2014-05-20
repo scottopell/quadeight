@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'httparty'
   spec.add_dependency 'mp4info'
+  spec.add_dependency 'ruby-mp3info'
 end

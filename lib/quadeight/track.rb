@@ -1,5 +1,6 @@
 class Track
   require 'mp4info'
+  require 'mp3info'
   attr_accessor :length
 
   # mp4 info requires an io object, and calls stat.size on it
@@ -22,17 +23,35 @@ class Track
   end
 
   def export_track location
-    tmp_dir = Dir.mktmpdir
-    mp4_path = "" # TODO
-    if file_type == 'mp3'
-      write_tags mp3_path
+    mp3_path = "#{location}/#{@name} -#{@year}.mp3"
+    if file_type == 'm4a'
+      begin
+        tmp_dir = Dir.mktmpdir
+        m4a_path = "#{tmp_dir}/tmp.m4a"
+        wav_path = "#{tmp_dir}/tmp.wav"
+        EightGetter.download_to track_file_stream_url, m4a_path
+        `faad #{m4a_path} -o #{wav_path}`
+        `lame #{wav_path} -o #{mp3_path}`
+      ensure
+        FileUtils.remove_entry tmp_dir
+      end
+    elsif file_type == 'mp3'
+      EightGetter.download_to track_file_stream_url, mp3_path
     end
-    m4a_path = "#{tmp_dir}/tmp."
-    wav_path = "#{tmp_dir}/tmp.wav"
-    `faad-o #{wav_path} `
+    write_tags mp3_path
+    return mp3_path
   end
 
   private
+
+  def write_tags mp3_path
+    Mp3Info.open(mp3_path) do |mp3|
+      mp3.tag.artist = performer
+      mp3.tag.title = name
+      mp3.tag.album = release_name
+      mp3.tag.year = year
+    end
+  end
 
   def file_type
     @file_type || populate_file_type
@@ -55,7 +74,7 @@ class Track
       @file_type = uri.path[-3..-1].downcase
       if file_type == "mp3"
         bytes = Helpers.partial_read 30, track_file_stream_url
-        @length = 240
+        @length = 240 * 1000 #TODO
       elsif file_type == "m4a"
         bytes = Helpers.partial_read 1900, track_file_stream_url
         #bytes[0..40].each_byte { |b| puts "#{b.chr}|#{b}" }

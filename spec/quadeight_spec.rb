@@ -104,10 +104,9 @@ describe 'client functions' do
       tmp_dir = Dir.mktmpdir
       location = track.export_track tmp_dir
       begin
-        File.open(location, 'r') do |file|
-          tag = ID3Tag.read file
-          expect(tag.artist.length).to be > 0
-          expect(tag.title.length).to be > 0
+        Mp3Info.open(location) do |mp3|
+          expect(mp3.tag.artist.length).to be > 0
+          expect(mp3.tag.title.length).to be > 0
         end
       ensure
         FileUtils.rm location
